@@ -266,15 +266,19 @@ stmt		: varDecl
 
 exp		: exp DASH exp
 	  	  {
+			$$ = new EECS::MinusNode("arm1", $1, "arm2", $3);
 		  }
 		| exp CROSS exp
 	  	  {
+			$$ = new EECS::AddNode("arm1", $1, "arm2", $3);
 		  }
 		| exp STAR exp
 	  	  {
+			$$ = new EECS::MultNode("arm1", $1, "arm2", $3);
 		  }
 		| exp SLASH exp
 	  	  {
+			$$ = new EECS::DivNode("arm1", $1, "arm2", $3);
 		  }
 		| exp AND exp
 	  	  {

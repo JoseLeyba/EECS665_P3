@@ -133,6 +133,87 @@ public:
 	void unparse(std::ostream& out, int indent);
 };
 
+/** Expression Nodes for the Mathematical Ops
+**/
+
+class ExpNode : public ASTNode {
+protected:
+    ExpNode(const Position* p) : ASTNode(p) {}
+};
+
+/** All our nodes for MathOps act similarly, we define them as ExpNodes who have 2 subtrees each with their own nodes, 
+ * and when we unparse them we will use parenthesis to keep the priority
+**/
+
+class AddNode : public ExpNode {
+public:
+    AddNode(ExpNode* lhs, ExpNode* rhs)
+        : ExpNode(nullptr), myLHS(lhs), myRHS(rhs) {}
+    void unparse(std::ostream& out, int indent) override {
+        out << "(";
+        myLHS->unparse(out, 0);
+        out << " + ";
+        myRHS->unparse(out, 0);
+        out << ")";
+    }
+
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
+};
+
+
+class MinusNode : public ExpNode {
+public:
+    MinusNode(ExpNode* lhs, ExpNode* rhs)
+        : ExpNode(nullptr), myLHS(lhs), myRHS(rhs) {}
+    void unparse(std::ostream& out, int indent) override {
+        out << "(";
+        myLHS->unparse(out, 0);
+        out << " - ";
+        myRHS->unparse(out, 0);
+        out << ")";
+    }
+
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
+};
+
+class MultNode : public ExpNode {
+public:
+    MultNode(ExpNode* lhs, ExpNode* rhs)
+        : ExpNode(nullptr), myLHS(lhs), myRHS(rhs) {}
+    void unparse(std::ostream& out, int indent) override {
+        out << "(";
+        myLHS->unparse(out, 0);
+        out << " * ";
+        myRHS->unparse(out, 0);
+        out << ")";
+    }
+
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
+};
+
+class DivNode : public ExpNode {
+public:
+    DivNode(ExpNode* lhs, ExpNode* rhs)
+        : ExpNode(nullptr), myLHS(lhs), myRHS(rhs) {}
+    void unparse(std::ostream& out, int indent) override {
+        out << "(";
+        myLHS->unparse(out, 0);
+        out << " / ";
+        myRHS->unparse(out, 0);
+        out << ")";
+    }
+
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
+};
+
 } //End namespace leviathan
 
 #endif
