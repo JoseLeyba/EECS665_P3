@@ -394,12 +394,14 @@ term 		: loc
 		  }
 		| LPAREN exp RPAREN
 		  {
-			$$ = $2;
+			$$ = $2; 
 
 		  }
 		| callExp
 		  {
-			//$$ = $1;
+			const Position * p;
+		  	//p = new Position($1->pos(), $1->pos());
+			//$$ = new CallExpNode(p);
 
 		  }
 

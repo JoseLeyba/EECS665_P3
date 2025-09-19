@@ -49,13 +49,7 @@ private:
 	std::list<DeclNode * > * myGlobals;
 };
 
-/** 
- * \class InitializerNode
- **/
-class InitializerNode : public ASTNode{
-	
 
-};
 
 class StmtNode : public ASTNode{
 public:
@@ -154,8 +148,24 @@ public:
     void unparse(std::ostream& out, int indent) override = 0;
 };
 
-class CallExpNode : public ExpNode{
+/** 
+ * \class InitializerNode
+ **/
+class InitializerNode : public ASTNode{
+public:
+	InitializerNode(const Position * p, ExpNode * value)
+	: ASTNode(p){
+        initialized_val = value;
+    }
+    void unparse(std::ostream& out, int indent) override;
 
+private:
+    ExpNode* initialized_val;
+};
+
+class CallExpNode : public ExpNode{
+	CallExpNode(const Position* p) : ExpNode(p) {}
+    void unparse(std::ostream& out, int indent) override;
 };
 
 class FalseNode : public ExpNode{
