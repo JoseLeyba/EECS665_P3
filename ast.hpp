@@ -5,6 +5,7 @@
 #include <list>
 #include "tokens.hpp"
 #include <cassert>
+#include <string>
 
 
 /* You'll probably want to add a bunch of ASTNode subclasses */
@@ -148,6 +149,8 @@ class FormalDeclNode : public VarDeclNode{
 class ExpNode : public ASTNode{
 protected:
 	ExpNode(const Position * p) : ASTNode(p){ }
+public:
+    void unparse(std::ostream& out, int indent) override = 0;
 };
 
 class CallExpNode : public ExpNode{
@@ -207,63 +210,159 @@ class IDNode : public LocNode{
 public:
 	IDNode(const Position * p, std::string nameIn) 
 	: LocNode(p), name(nameIn){ }
-	void unparse(std::ostream& out, int indent);
+	void unparse(std::ostream& out, int indent) override;
 private:
 	/** The name of the identifier **/
 	std::string name;
 };
 
 class BinaryExpNode : public ExpNode{
-
+protected:
+    BinaryExpNode(const Position* p, ExpNode* lhs, ExpNode* rhs)
+        : ExpNode(p), myLHS(lhs), myRHS(rhs) {}
+    ExpNode* myLHS = nullptr;
+    ExpNode* myRHS = nullptr;
+	void unparse(std::ostream& out, int indent) override;
 };
+
+
+/** All our nodes for MathOps act similarly, we define them as BinaryExpNodes who have 2 subtrees each with their own nodes
+**/
+
 
 class AndNode : public BinaryExpNode{
-
+public:
+    AndNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
-class DivideNode : public BinaryExpNode{
 
+class DivideNode : public BinaryExpNode{
+public:
+    DivideNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class EqualsNode : public BinaryExpNode{
-
+public:
+    EqualsNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class GreaterEqNode : public BinaryExpNode{
-
+public:
+    GreaterEqNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class GreaterNode : public BinaryExpNode{
-
+public:
+    GreaterNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class LessEqNode : public BinaryExpNode{
-
+public:
+    LessEqNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class LessNode : public BinaryExpNode{
-
+public:
+    LessNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class MinusNode : public BinaryExpNode{
-
+public:
+    MinusNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class NotEqualsNode : public BinaryExpNode{
-
+public:
+    NotEqualsNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class OrNode : public BinaryExpNode{
-
+public:
+    OrNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class PlusNode : public BinaryExpNode{
-
+public:
+    PlusNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
 
 class TimesNode : public BinaryExpNode{
-
+public:
+    TimesNode(const Position* p,ExpNode* lhs, ExpNode* rhs)
+        : BinaryExpNode(p, lhs, rhs) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    ExpNode* myLHS;
+    ExpNode* myRHS;
 };
+
 
 /**  \class TypeNode
 * Superclass of nodes that indicate a data type. For example, in 
@@ -281,7 +380,7 @@ public:
 class IntTypeNode : public TypeNode{
 public:
 	IntTypeNode(const Position * p) : TypeNode(p){ }
-	void unparse(std::ostream& out, int indent);
+	void unparse(std::ostream& out, int indent) override;
 };
 
 class VoidTypeNode : public TypeNode{

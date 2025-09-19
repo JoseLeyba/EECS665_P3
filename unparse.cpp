@@ -56,4 +56,100 @@ void IntTypeNode::unparse(std::ostream& out, int indent){
 	out << "int";
 }
 
+
+void AndNode::unparse(std::ostream& out, int indent) {
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " and ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+void DivideNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " / ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void EqualsNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " == ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void GreaterEqNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " >= ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void GreaterNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " > ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void LessEqNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " <= ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void LessNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " < ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void MinusNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " - ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void NotEqualsNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " != ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void OrNode::unparse(std::ostream& out, int indent) {
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " or ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+void PlusNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " + ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
+
+
+void PlusNode::unparse(std::ostream& out, int indent){
+    out << "(";
+    myLHS->unparse(out, 0);
+    out << " + ";
+    myRHS->unparse(out, 0);
+    out << ")";
+}
 } // End namespace leviathan
