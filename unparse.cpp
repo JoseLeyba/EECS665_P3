@@ -56,6 +56,17 @@ void IntTypeNode::unparse(std::ostream& out, int indent){
 	out << "int";
 }
 
+void VoidTypeNode::unparse(std::ostream& out, int indent){
+    out << "void";
+}
+
+void BoolTypeNode::unparse(std::ostream& out, int indent){
+    out << "bool";
+}
+
+void FileTypeNode::unparse(std::ostream& out, int indent){
+    out << "file";
+}
 
 void AndNode::unparse(std::ostream& out, int indent) {
     out << "(";
@@ -135,15 +146,6 @@ void OrNode::unparse(std::ostream& out, int indent) {
     myRHS->unparse(out, 0);
     out << ")";
 }
-
-void PlusNode::unparse(std::ostream& out, int indent){
-    out << "(";
-    myLHS->unparse(out, 0);
-    out << " + ";
-    myRHS->unparse(out, 0);
-    out << ")";
-}
-
 
 void PlusNode::unparse(std::ostream& out, int indent){
     out << "(";

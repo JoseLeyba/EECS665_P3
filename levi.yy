@@ -182,16 +182,19 @@ dataType	: primType LBRACKET INTLITERAL RBRACKET
 
 primType	: INT
 		  {
-		  $$ = new IntTypeNode($1->pos());
+		  	$$ = new IntTypeNode($1->pos());
 		  }
 		| BOOL
 		  {
+			$$ = new BoolTypeNode($1->pos());
 		  }
 		| FILE
 		  {
+			$$ = new FileTypeNode($1->pos());
 		  }
 		| VOID
 		  {
+			$$ = new VoidTypeNode($1->pos());
 		  }
 
 fnDecl 		: name COLON LPAREN maybeFormals RPAREN type LCURLY stmtList RCURLY
@@ -389,7 +392,7 @@ term 		: loc
 		  {
 			const Position * p;
 		  	p = new Position($1->pos(), $1->pos());
-			$$ = new StrLitNode(p, $1->str());
+			//$$ = new StrLitNode(p, $1->str());
 
 		  }
 		| LPAREN exp RPAREN
@@ -441,13 +444,13 @@ literal		: TRUE
 		  {	 
 			const Position * p;
 		  	p = new Position($1->pos(), $1->pos());
-			$$ = new IntLitNode(p, $1);
+			//$$ = new IntLitNode(p, $1);
 		  }
 		| STRINGLITERAL
 		  {	 
 			const Position * p;
 		  	p = new Position($1->pos(), $1->pos());
-			$$ = new StrLitNode(p, $1);
+			//$$ = new StrLitNode(p, $1);
 		  }
 
 loc		: name

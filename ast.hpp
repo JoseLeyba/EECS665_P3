@@ -164,6 +164,7 @@ private:
 };
 
 class CallExpNode : public ExpNode{
+public:
 	CallExpNode(const Position* p) : ExpNode(p) {}
     void unparse(std::ostream& out, int indent) override;
 };
@@ -424,7 +425,9 @@ public:
 };
 
 class VoidTypeNode : public TypeNode{
-
+public:
+    VoidTypeNode(const Position * p) : TypeNode(p){ }
+    void unparse(std::ostream& out, int indent) override;
 };
 
 class ImmutableTypeNode : public TypeNode{
@@ -432,11 +435,15 @@ class ImmutableTypeNode : public TypeNode{
 };
 
 class FileTypeNode : public TypeNode{
-
+public:
+    FileTypeNode(const Position * p) : TypeNode(p){ }
+    void unparse(std::ostream& out, int indent) override;
 };
 
 class BoolTypeNode : public TypeNode{
-
+public:
+    BoolTypeNode(const Position * p) : TypeNode(p){ }
+    void unparse(std::ostream& out, int indent) override;
 };
 
 class ArrayTypeNode : public TypeNode{
