@@ -158,15 +158,26 @@ class CallExpNode : public ExpNode{
 };
 
 class FalseNode : public ExpNode{
-
+public:
+	FalseNode(const Position* p) : ExpNode(p) {}
+    void unparse(std::ostream& out, int indent) override;
 };
 
 class IntLitNode : public ExpNode{
-
+public:
+    IntLitNode(const Position* p, int val) : ExpNode(p), value(val) {}
+    void unparse(std::ostream& out, int indent) override;
+private:
+    int value;
 };
 
 class StrLitNode : public ExpNode{
-
+public:
+    StrLitNode(const Position* p, const std::string& val) : ExpNode(p), value(val) {}
+    void unparse(std::ostream& out, int indent) override;
+	
+private:
+    std::string value;
 };
 
 class ThrashNode : public ExpNode{
@@ -174,19 +185,31 @@ class ThrashNode : public ExpNode{
 };
 
 class TrueNode : public ExpNode{
+public:
+	TrueNode(const Position* p) : ExpNode(p) {}
+    void unparse(std::ostream& out, int indent) override;
 
 };
 
 class UnaryExpNode : public ExpNode{
-
+protected:
+    UnaryExpNode(const Position* p, ExpNode* sub)
+        : ExpNode(p), mySub(sub) {}
+    ExpNode* mySub;
 };
 
 class NegNode : public UnaryExpNode{
-
+public:
+    NegNode(const Position* p, ExpNode* sub)
+        : UnaryExpNode(p, sub) {}
+    void unparse(std::ostream& out, int indent) override;
 };
 
 class NotNode : public UnaryExpNode{
-
+public:
+    NotNode(const Position* p, ExpNode* sub)
+        : UnaryExpNode(p, sub) {}
+    void unparse(std::ostream& out, int indent) override;
 };
 
 /** A memory location. LocNodes subclass ExpNode
@@ -200,7 +223,13 @@ public:
 };
 
 class ArrayIndexNode : public LocNode{
-
+public:
+    ArrayIndexNode(const Position* p, ExpNode* base, ExpNode* index)
+        : LocNode(p), myBase(base), myIndex(index) {}
+    void unparse(std::ostream& out, int indent) override;
+private:
+    ExpNode* myBase;
+    ExpNode* myIndex;
 };
 
 /** An identifier. Note that IDNodes subclass

@@ -109,6 +109,12 @@
 %type <leviathan::TypeNode *> primType
 %type <leviathan::LocNode *> loc
 %type <leviathan::IDNode *> name
+%type <leviathan::ExpNode *> exp
+%type <leviathan::StmtNode *> stmt
+%type <leviathan::ExpNode *> literal
+%type <leviathan::Position *> position
+%type <leviathan::ExpNode *> term
+%type <leviathan::InitializerNode*> initializer
 
 /* NOTE: Make sure to add precedence and associativity 
  * declarations
@@ -266,59 +272,87 @@ stmt		: varDecl
 
 exp		: exp DASH exp
 	  	  {
-			$$ = new MinusNode(@$, $1, $3);
+		  	const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new MinusNode(p, $1, $3);
 		  }
 		| exp CROSS exp
 	  	  {
-			$$ = new PlusNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new PlusNode(p, $1, $3);
 		  }
 		| exp STAR exp
 	  	  {
-			$$ = new TimesNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new TimesNode(p, $1, $3);
 		  }
 		| exp SLASH exp
 	  	  {
-			$$ = new DivideNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new DivideNode(p, $1, $3);
 		  }
 		| exp AND exp
 	  	  {
-			$$ = new AndNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new AndNode(p, $1, $3);
 		  }
 		| exp OR exp
 	  	  {
-			$$ = new OrNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new OrNode(p, $1, $3);
 		  }
 		| exp EQUALS exp
 	  	  {
-			$$ = new EqualsNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new EqualsNode(p, $1, $3);
 		  }
 		| exp NOTEQUALS exp
 	  	  {
-			$$ = new NotEqualsNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new NotEqualsNode(p, $1, $3);
 		  }
 		| exp GREATER exp
 	  	  {
-			$$ = new GreaterNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new GreaterNode(p, $1, $3);
 		  }
 		| exp GREATEREQ exp
 	  	  {
-			$$ = new GreaterEqNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new GreaterEqNode(p, $1, $3);
 		  }
 		| exp LESS exp
 	  	  {
-			$$ = new LessNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new LessNode(p, $1, $3);
 		  }
 		| exp LESSEQ exp
 	  	  {
-			$$ = new LessEqNode(@$, $1, $3);
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+			$$ = new LessEqNode(p, $1, $3);
 		  }
 		| NOT exp
 	  	  {
-			$$ = new NotNode(@$, $2);
+			const Position * p;
+		  	p = new Position($1->pos(), $2->pos());
+			$$ = new NotNode(p, $2);
 		  }
 		| DASH term
 	  	  {
-			$$ = new NegNode(@$, $2);
+			const Position * p;
+		  	p = new Position($1->pos(), $2->pos());
+			$$ = new NegNode(p, $2);
 		  }
 		| term
 	  	  {
@@ -341,34 +375,74 @@ actualsList	: exp
 		  }
 
 term 		: loc
-		  { }
+		  {
+			$$ = $1;  // loc will return a locnode already, so saying it a second time doesn't help;
+
+		  }
 		| literal
-		  { }
+		  {
+
+			$$ = $1;
+
+		   }
 		| THRASH 
-		  { /*TODO $$ = new StrLitNode($1->pos(), $1->str());*/ }
+		  {
+			const Position * p;
+		  	p = new Position($1->pos(), $1->pos());
+			$$ = new StrLitNode(p, $1->str());
+
+		  }
 		| LPAREN exp RPAREN
-		  {}
+		  {
+			$$ = $2;
+
+		  }
 		| callExp
-		  {}
+		  {
+			//$$ = $1;
+
+		  }
 
 initializer	: literal
-		  { } 
+		  {$$ = $1;} 
 		| LBRACKET litList RBRACKET
-		  { } 
+		  { 
+			const Position * p;
+		  	p = new Position($1->pos(), $3->pos());
+
+		  } 
 
 litList		: literal
-		  { } 
+		  { 
+			
+		  } 
 		| literal COMMA litList
 		  { } 
 
 literal		: TRUE
-		  {}
+		  {	 
+			const Position * p;
+		  	p = new Position($1->pos(), $1->pos());
+			$$ = new TrueNode(p);
+		  }
 		| FALSE
-		  {}
+		  {	 
+			const Position * p;
+		  	p = new Position($1->pos(), $1->pos());
+			$$ = new FalseNode(p);
+		  }
 		| INTLITERAL
-		  {}
+		  {	 
+			const Position * p;
+		  	p = new Position($1->pos(), $1->pos());
+			$$ = new IntLitNode(p, $1);
+		  }
 		| STRINGLITERAL
-		  {}
+		  {	 
+			const Position * p;
+		  	p = new Position($1->pos(), $1->pos());
+			$$ = new StrLitNode(p, $1);
+		  }
 
 loc		: name
 		  {
@@ -376,6 +450,9 @@ loc		: name
 		  }
 		| loc LBRACKET exp RBRACKET
 		  {
+			const Position * p;
+		  	p = new Position($1->pos(), $1->pos());
+			$$ = new ArrayIndexNode(p, $1, $3);
 		  }
 
 name		: ID

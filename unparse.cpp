@@ -152,4 +152,40 @@ void PlusNode::unparse(std::ostream& out, int indent){
     myRHS->unparse(out, 0);
     out << ")";
 }
+
+void NegNode::unparse(std::ostream& out, int indent){
+    out << "(-";
+    mySub->unparse(out, 0);
+    out << ")";
+}
+
+void NotNode::unparse(std::ostream& out, int indent){
+    out << "(!";
+    mySub->unparse(out, 0);
+    out << ")";
+}
+
+void TrueNode::unparse(std::ostream& out, int indent) {
+    out << "true";
+}
+
+void FalseNode::unparse(std::ostream& out, int indent) {
+    out << "false";
+}
+
+void IntLitNode::unparse(std::ostream& out, int indent) {
+    out << value;  // assuming you add an int field 'value'
+}
+
+void StrLitNode::unparse(std::ostream& out, int indent) {
+    out << '"' << value << '"';  // assuming you add a std::string 'value'
+}
+
+void ArrayIndexNode::unparse(std::ostream& out, int indent) {
+    myBase->unparse(out, 0);  // assuming you have a base array expression
+    out << "[";
+    myIndex->unparse(out, 0);
+    out << "]";
+}
+
 } // End namespace leviathan
