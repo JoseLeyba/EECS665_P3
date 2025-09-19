@@ -404,7 +404,11 @@ term 		: loc
 		  }
 
 initializer	: literal
-		  {$$ = $1;} 
+		  {		  	
+			const Position * p;
+		  	p = new Position($1->pos(), $1->pos());
+			$$ = new InitializerNode(p, $1);
+		  } 
 		| LBRACKET litList RBRACKET
 		  { 
 			const Position * p;

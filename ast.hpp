@@ -53,6 +53,7 @@ private:
  * \class InitializerNode
  **/
 class InitializerNode : public ASTNode{
+	
 
 };
 
