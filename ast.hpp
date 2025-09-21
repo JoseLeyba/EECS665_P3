@@ -5,6 +5,7 @@
 #include <list>
 #include "tokens.hpp"
 #include <cassert>
+#include <string>
 
 
 /* You'll probably want to add a bunch of ASTNode subclasses */
@@ -18,6 +19,7 @@ class DeclNode;
 class TypeNode;
 class StmtNode;
 class IDNode;
+class ExpNode;
 
 /** 
 * \class ASTNode
@@ -52,7 +54,11 @@ private:
  * \class InitializerNode
  **/
 class InitializerNode : public ASTNode{
-
+public:
+	InitializerNode(const Position * p, ExpNode* expr) : ASTNode(p), myExp(expr) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+	ExpNode * myExp;
 };
 
 class StmtNode : public ASTNode{
@@ -129,10 +135,18 @@ public:
 		assert (myType != nullptr);
 		assert (myID != nullptr);
 	}
+
+	VarDeclNode(const Position * p, IDNode * inID, TypeNode * inType, InitializerNode * initType)
+	: DeclNode(p), myID(inID), myType(inType), myInit(initType){
+		assert (myType != nullptr);
+		assert (myID != nullptr);
+	}
+
 	void unparse(std::ostream& out, int indent);
 private:
 	IDNode * myID;
 	TypeNode * myType;
+	InitializerNode * myInit;
 };
 
 class FormalDeclNode : public VarDeclNode{
@@ -155,15 +169,25 @@ class CallExpNode : public ExpNode{
 };
 
 class FalseNode : public ExpNode{
-
+public:
+	FalseNode(const Position * p) : ExpNode(p) {}
+	void unparse(std::ostream& out, int indent) override;
 };
 
 class IntLitNode : public ExpNode{
-
+public:
+	IntLitNode(const Position * p, int val) : ExpNode(p), value(val) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+	int value;
 };
 
 class StrLitNode : public ExpNode{
-
+public:
+	StrLitNode(const Position * p, std::string string) : ExpNode(p), string(string) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+	std::string string;
 };
 
 class ThrashNode : public ExpNode{
@@ -171,7 +195,9 @@ class ThrashNode : public ExpNode{
 };
 
 class TrueNode : public ExpNode{
-
+public:
+	TrueNode(const Position * p) : ExpNode(p) {}
+	void unparse(std::ostream& out, int indent) override;
 };
 
 class UnaryExpNode : public ExpNode{

@@ -109,6 +109,8 @@
 %type <leviathan::TypeNode *> primType
 %type <leviathan::LocNode *> loc
 %type <leviathan::IDNode *> name
+%type <leviathan::ExpNode *> literal
+%type <leviathan::InitializerNode *> initializer
 
 /* NOTE: Make sure to add precedence and associativity 
  * declarations
@@ -156,6 +158,9 @@ varDecl		: name COLON type
 		  }
 		| name COLON type ASSIGN initializer
 		  {
+			const Position * p;
+		  	p = new Position($1->pos(), $4->pos());
+		  	$$ = new VarDeclNode(p,$1, $3, $5);
 		  }
 
 type		: IMMUTABLE dataType
@@ -337,23 +342,43 @@ term 		: loc
 		  {}
 
 initializer	: literal
-		  { } 
+		  {
+			const Position * p;
+			p = new Position($1->pos(), $1->pos());
+			$$ = new InitializerNode(p, $1);
+		  } 
 		| LBRACKET litList RBRACKET
 		  { } 
 
 litList		: literal
-		  { } 
+		  { }
 		| literal COMMA litList
 		  { } 
 
 literal		: TRUE
-		  {}
+		  {
+			const Position * p;
+			p = new Position($1->pos(), $1->pos());
+			$$ = new TrueNode(p);
+		  }
 		| FALSE
-		  {}
+		  { 
+			const Position * p;
+			p = new Position($1->pos(), $1->pos());
+			$$ = new FalseNode(p);
+		  }
 		| INTLITERAL
-		  {}
+		  {
+			const Position * p;
+			p = new Position($1->pos(), $1->pos());
+			$$ = new IntLitNode(p, $1->num());
+		  }
 		| STRINGLITERAL
-		  {}
+		  {
+			const Position * p;
+			p = new Position($1->pos(), $1->pos());
+			$$ = new StrLitNode(p, $1->str());
+		  }
 
 loc		: name
 		  {

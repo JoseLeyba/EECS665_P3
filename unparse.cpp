@@ -45,6 +45,12 @@ void VarDeclNode::unparse(std::ostream& out, int indent){
 	this->myID->unparse(out, 0);
 	out << ": ";
 	this->myType->unparse(out, 0);
+
+	if (myInit != nullptr) {
+		out << " = ";
+		this->myInit->unparse(out, 0);
+	}
+
 	out << ";\n";
 }
 
@@ -54,6 +60,26 @@ void IDNode::unparse(std::ostream& out, int indent){
 
 void IntTypeNode::unparse(std::ostream& out, int indent){
 	out << "int";
+}
+
+void FalseNode::unparse(std::ostream& out, int indent){
+	out << "false";
+}
+
+void TrueNode::unparse(std::ostream& out, int indent){
+	out << "true";
+}
+
+void IntLitNode::unparse(std::ostream &out, int indent) {
+    out << value;
+}
+
+void StrLitNode::unparse(std::ostream &out, int indent) {
+	out << string;
+}
+
+void InitializerNode::unparse(std::ostream &out, int indent) {
+	this->myExp->unparse(out, 0);
 }
 
 } // End namespace leviathan
