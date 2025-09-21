@@ -5,3 +5,47 @@ global4: int = false;
 main : () void {
 	return;
 }
+g1: int;
+g2: immutable;
+g3: int[5];
+g4: immutable;
+g5: bool;
+g6: file;
+g7: int = 42;
+g8: bool = true;
+zero : () int {
+	return 0;
+}
+add : (x: int, y: int) int {
+	return (x + y);
+}
+get : (arr: int[5], i: int) int {
+	return arr[i];
+}
+firstOfImm : (v: immutable) int {
+	return v[0];
+}
+callZero : () int {
+	return zero();
+}
+useGlobals : () int {
+	return (g7 + get(g3, 1));
+}
+math : (a: int) int {
+	return ((-((a + (3 * 4)) - 2)) / 2);
+}
+isEqOrLess : (a: int, b: int) bool {
+	return ((a < b) or (a == b));
+}
+cmp2 : (a: int, b: int, c: int) bool {
+	return ((a > b) and (a <= c));
+}
+notEq : (a: int, b: int) bool {
+	return (!(a == b));
+}
+indexChain : (a: int[5]) int {
+	return a[2];
+}
+main : () void {
+	return;
+}

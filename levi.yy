@@ -110,6 +110,8 @@
 %type <leviathan::LocNode *> loc
 %type <leviathan::IDNode *> name
 %type <leviathan::ExpNode*> exp
+%type <leviathan::CallExpNode*> callExp
+%type <std::list<leviathan::ExpNode*>*> actualsList
 %type <leviathan::ExpNode*> term
 %type <leviathan::ExpNode*> factor
 %type <leviathan::ExpNode*> simpleExp
@@ -175,6 +177,8 @@ varDecl		: name COLON type
 
 type		: IMMUTABLE dataType
 		  {
+			const Position* p = new Position($1->pos(), $2->pos());
+      		$$ = new ImmutableTypeNode(p, $2);
 		  }
 		| dataType
 		  {
@@ -183,6 +187,8 @@ type		: IMMUTABLE dataType
 
 dataType	: primType LBRACKET INTLITERAL RBRACKET
 		  {
+			const Position* p = new Position($1->pos(), $4->pos());
+      		$$ = new ArrayTypeNode(p, $1, $3->num());
 		  }
 		| primType
 		  {
@@ -195,9 +201,11 @@ primType	: INT
 		  }
 		| BOOL
 		  {
+			$$ = new BoolTypeNode($1->pos());
 		  }
 		| FILE
 		  {
+			$$ = new FileTypeNode($1->pos());
 		  }
 		| VOID
 		  {
@@ -232,9 +240,13 @@ formalList	: formalDecl
 
 formalDecl	: name COLON type
 		  {
+			const Position* p = new Position($1->pos(), $3->pos());
+      		$$ = new VarDeclNode(p, $1, $3);
 		  }
 		| name COLON type ASSIGN initializer
 		  {
+			const Position* p = new Position($1->pos(), $3->pos());
+      		$$ = new VarDeclNode(p, $1, $3, $5);
 		  }
 
 stmtList	: /* epsilon */
@@ -385,28 +397,38 @@ exp		: exp DASH exp
 
 callExp		: loc LPAREN RPAREN
 		  {
+			const Position* p = new Position($1->pos(), $3->pos());
+      		$$ = new CallExpNode(p, $1, new std::list<leviathan::ExpNode*>());
 		  }
 		| loc LPAREN actualsList RPAREN
 		  {
+			const Position* p = new Position($1->pos(), $4->pos());
+      		$$ = new CallExpNode(p, $1, $3);
 		  }
 
 actualsList	: exp
 		  {
+			    auto* lst = new std::list<leviathan::ExpNode*>();
+      			lst->push_back($1);
+      			$$ = lst;
 		  }
 		| actualsList COMMA exp
 		  {
+			$1->push_back($3); $$ = $1;
 		  }
 
 term 		: loc
-		  { }
+		  { $$ = $1;}
 		| literal
-		  { }
+		  { $$ = $1;}
 		| THRASH 
-		  { /*TODO $$ = new StrLitNode($1->pos(), $1->str());*/ }
+		  { /*TODO $$ = new StrLitNode($1->pos(), $1->str());*/
+		   //Should this not be just a ThrashNode?
+		  }
 		| LPAREN exp RPAREN
-		  {}
+		  {$$ = $2;}
 		| callExp
-		  {}
+		  {$$ = $1;}
 
 initializer	: literal
 		  {
@@ -453,6 +475,8 @@ loc		: name
 		  }
 		| loc LBRACKET exp RBRACKET
 		  {
+			const Position* p = new Position($1->pos(), $4->pos());
+      		$$ = new ArrayIndexNode(p, $1, $3);
 		  }
 
 name		: ID

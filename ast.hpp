@@ -20,6 +20,7 @@ class TypeNode;
 class StmtNode;
 class IDNode;
 class ExpNode;
+class LocNode;
 /** 
 * \class ASTNode
 * Base class for all other AST Node types
@@ -184,7 +185,13 @@ public:
 };
 
 class CallExpNode : public ExpNode{
-
+public:
+  CallExpNode(const Position* p, LocNode* callee, std::list<ExpNode*>* args)
+    : ExpNode(p), myCallee(callee), myArgs(args) { assert(callee && args); }
+  void unparse(std::ostream& out, int indent) override;
+private:
+  LocNode* myCallee;
+  std::list<ExpNode*>* myArgs;
 };
 
 class FalseNode : public ExpNode{
@@ -210,7 +217,9 @@ private:
 };
 
 class ThrashNode : public ExpNode{
-
+public:
+  ThrashNode(const Position* p) : ExpNode(p) {}
+  void unparse(std::ostream& out, int) override { out << "thrash"; }
 };
 
 class TrueNode : public ExpNode{
@@ -254,7 +263,13 @@ public:
 };
 
 class ArrayIndexNode : public LocNode{
-
+public:
+  ArrayIndexNode(const Position* p, LocNode* base, ExpNode* index)
+    : LocNode(p), myBase(base), myIndex(index) { assert(base && index); }
+  void unparse(std::ostream& out, int indent) override;
+private:
+  LocNode* myBase;
+  ExpNode* myIndex;
 };
 
 /** An identifier. Note that IDNodes subclass
@@ -408,19 +423,38 @@ public:
 };
 
 class ImmutableTypeNode : public TypeNode{
-
+public:
+public:
+    ImmutableTypeNode(const Position* p, TypeNode* base)
+      : TypeNode(p), myBase(base) { assert(base); }
+    void unparse(std::ostream& out, int indent) override;
+    TypeNode* base() const { return myBase; }
+private:
+    TypeNode* myBase;
 };
 
 class FileTypeNode : public TypeNode{
-
+public:
+	FileTypeNode(const Position * p) : TypeNode(p){ }
+	void unparse(std::ostream& out, int indent) override;
 };
 
 class BoolTypeNode : public TypeNode{
-
+public:
+	BoolTypeNode(const Position * p) : TypeNode(p){ }
+	void unparse(std::ostream& out, int indent) override;
 };
 
 class ArrayTypeNode : public TypeNode{
-
+public:
+    ArrayTypeNode(const Position* p, TypeNode* elem, int size)
+      : TypeNode(p), myElem(elem), mySize(size) { assert(elem); }
+    void unparse(std::ostream& out, int indent) override;
+    TypeNode* elem() const { return myElem; }
+    int size() const { return mySize; }
+private:
+    TypeNode* myElem;
+    int mySize;
 };
 
 } //End namespace leviathan

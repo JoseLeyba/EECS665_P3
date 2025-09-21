@@ -56,10 +56,21 @@ void IDNode::unparse(std::ostream& out, int indent){
 	out << this->name;
 }
 
+void ImmutableTypeNode::unparse(std::ostream& out, int indent){
+    out << "immutable";
+}
 void IntTypeNode::unparse(std::ostream& out, int indent){
 	out << "int";
 }
+void BoolTypeNode::unparse(std::ostream& out, int indent){
+	out << "bool";
 
+}void FileTypeNode::unparse(std::ostream& out, int indent){
+	out << "file";
+}
+void VoidTypeNode::unparse(std::ostream& out, int indent){
+    out << "void";
+}
 void FalseNode::unparse(std::ostream& out, int indent){
 	out << "false";
 }
@@ -197,9 +208,7 @@ void ReturnStmtNode::unparse(std::ostream& out, int indent) {
     out << ";\n";
 }
 
-void VoidTypeNode::unparse(std::ostream& out, int /*indent*/){
-    out << "void";
-}
+
 
 void FnDeclNode::unparse(std::ostream& out, int indent){
     doIndent(out, indent);
@@ -230,5 +239,31 @@ void FnDeclNode::unparse(std::ostream& out, int indent){
 
     doIndent(out, indent);
     out << "}\n";
+}
+
+void ArrayTypeNode::unparse(std::ostream& out, int indent) {
+    myElem->unparse(out, 0);
+    out << "[";
+    out << mySize;
+    out << "]";
+}
+
+void ArrayIndexNode::unparse(std::ostream& out, int){
+  myBase->unparse(out, 0);
+  out << "[";
+  myIndex->unparse(out, 0);
+  out << "]";
+}
+
+void CallExpNode::unparse(std::ostream& out, int){
+  myCallee->unparse(out, 0);
+  out << "(";
+  bool first = true;
+  for (auto* e : *myArgs){
+    if (!first) out << ", ";
+    first = false;
+    e->unparse(out, 0);
+  }
+  out << ")";
 }
 } // End namespace leviathan
