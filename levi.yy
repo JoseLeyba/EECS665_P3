@@ -156,6 +156,7 @@ decl		: varDecl SEMICOL
 		  }
 		| fnDecl
 		  {
+			$$ = $1;
 		  }
 
 varDecl		: name COLON type
@@ -196,6 +197,7 @@ primType	: INT
 		  }
 		| VOID
 		  {
+			$$ = new VoidTypeNode($1->pos());
 		  }
 
 fnDecl 		: name COLON LPAREN maybeFormals RPAREN type LCURLY stmtList RCURLY

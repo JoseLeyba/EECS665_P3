@@ -380,7 +380,9 @@ public:
 };
 
 class VoidTypeNode : public TypeNode{
-
+public:
+	VoidTypeNode(const Position * p) : TypeNode(p){ }
+	void unparse(std::ostream& out, int indent) override;
 };
 
 class ImmutableTypeNode : public TypeNode{

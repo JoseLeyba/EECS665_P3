@@ -173,6 +173,10 @@ void ReturnStmtNode::unparse(std::ostream& out, int indent) {
     out << ";\n";
 }
 
+void VoidTypeNode::unparse(std::ostream& out, int /*indent*/){
+    out << "void";
+}
+
 void FnDeclNode::unparse(std::ostream& out, int indent){
     doIndent(out, indent);
     myID->unparse(out, 0);
