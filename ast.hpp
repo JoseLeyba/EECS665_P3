@@ -136,7 +136,7 @@ private:
 	TypeNode * myType;
 };
 
-class FormalDeclNode : public VarDeclNode{
+class FormalDeclNode : public VarDeclNode{  
 
 };
 
@@ -178,15 +178,27 @@ class TrueNode : public ExpNode{
 };
 
 class UnaryExpNode : public ExpNode{
+public:
+    UnaryExpNode(const Position* p, ExpNode* exp)
+        : ExpNode(p), myExp(exp) {}
 
+protected:
+    ExpNode* myExp;
 };
 
 class NegNode : public UnaryExpNode{
-
+public:
+    NegNode(const Position* p, ExpNode* exp) 
+        : UnaryExpNode(p, exp) {}
+    void unparse(std::ostream& out, int indent) override;
 };
 
-class NotNode : public UnaryExpNode{
 
+class NotNode : public UnaryExpNode{
+public:
+    NotNode(const Position* p, ExpNode* exp) 
+        : UnaryExpNode(p, exp) {}
+    void unparse(std::ostream& out, int indent) override;
 };
 
 /** A memory location. LocNodes subclass ExpNode
@@ -222,7 +234,6 @@ protected:
         : ExpNode(p), myLHS(lhs), myRHS(rhs) {}
     ExpNode* myLHS = nullptr;
     ExpNode* myRHS = nullptr;
-	void unparse(std::ostream& out, int indent) override;
 };
 
 
@@ -371,9 +382,10 @@ private:
 **/
 class TypeNode : public ASTNode{
 protected:
-	TypeNode(const Position * p) : ASTNode(p){
-	}
+	TypeNode(const Position * p) : ASTNode(p){}
+    
 public:
+    virtual ~TypeNode() {}
 	virtual void unparse(std::ostream& out, int indent) = 0;
 };
 

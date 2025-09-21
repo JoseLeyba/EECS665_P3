@@ -109,6 +109,13 @@
 %type <leviathan::TypeNode *> primType
 %type <leviathan::LocNode *> loc
 %type <leviathan::IDNode *> name
+%type <leviathan::ExpNode*> exp
+%type <leviathan::ExpNode*> term
+%type <leviathan::ExpNode*> factor
+%type <leviathan::ExpNode*> simpleExp
+%type <leviathan::ExpNode*> relExp
+%type <leviathan::StmtNode*> stmt
+%type <leviathan::IDNode*> id
 
 /* NOTE: Make sure to add precedence and associativity 
  * declarations
@@ -266,59 +273,86 @@ stmt		: varDecl
 
 exp		: exp DASH exp
 	  	  {
-			$$ = new MinusNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new MinusNode(p, $1, $3);
 		  }
 		| exp CROSS exp
 	  	  {
-			$$ = new PlusNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new PlusNode(p, $1, $3);
 		  }
 		| exp STAR exp
 	  	  {
-			$$ = new TimesNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new TimesNode(p, $1, $3);
 		  }
 		| exp SLASH exp
 	  	  {
-			$$ = new DivideNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new DivideNode(p, $1, $3);
 		  }
 		| exp AND exp
 	  	  {
-			$$ = new AndNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new AndNode(p, $1, $3);
 		  }
 		| exp OR exp
 	  	  {
-			$$ = new OrNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new OrNode(p, $1, $3);
 		  }
 		| exp EQUALS exp
 	  	  {
-			$$ = new EqualsNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new EqualsNode(p, $1, $3);
 		  }
 		| exp NOTEQUALS exp
 	  	  {
-			$$ = new NotEqualsNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new NotEqualsNode(p, $1, $3);
 		  }
 		| exp GREATER exp
 	  	  {
-			$$ = new GreaterNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new GreaterNode(p, $1, $3);
 		  }
 		| exp GREATEREQ exp
 	  	  {
-			$$ = new GreaterEqNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new GreaterEqNode(p, $1, $3);
 		  }
 		| exp LESS exp
-	  	  {
-			$$ = new LessNode(@$, $1, $3);
+	  	  {const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new LessNode(p, $1, $3);
 		  }
 		| exp LESSEQ exp
 	  	  {
-			$$ = new LessEqNode(@$, $1, $3);
+			const Position * p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new LessEqNode(p, $1, $3);
 		  }
 		| NOT exp
 	  	  {
-			$$ = new NotNode(@$, $2);
+			const Position * p;
+			p = new Position($1->pos(), $2->pos());
+			$$ = new NotNode(p, $2);
 		  }
 		| DASH term
 	  	  {
-			$$ = new NegNode(@$, $2);
+			const Position * p;
+			p = new Position($1->pos(), $2->pos());
+			$$ = new NegNode(p, $2);
 		  }
 		| term
 	  	  {

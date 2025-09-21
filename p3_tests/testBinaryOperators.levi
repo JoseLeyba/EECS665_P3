@@ -1,0 +1,28 @@
+main : () void {
+    a:int;
+    b:int;
+    c:int;
+
+    a = 5;
+    b = 10;
+
+    # Arithmetic
+    c = a + b;
+    c = a - b;
+    c = a * b;
+    c = a / b;
+
+    # Comparison
+    c = (a == b);
+    c = (a != b);
+    c = (a < b);
+    c = (a <= b);
+    c = (a > b);
+    c = (a >= b);
+
+    # Boolean (note: Levi uses "and" and "or" instead of && and ||)
+    c = (a and b);
+    c = (a or b);
+
+    return;
+}

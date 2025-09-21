@@ -144,12 +144,24 @@ void PlusNode::unparse(std::ostream& out, int indent){
     out << ")";
 }
 
-
-void PlusNode::unparse(std::ostream& out, int indent){
+void TimesNode::unparse(std::ostream& out, int indent) {
     out << "(";
     myLHS->unparse(out, 0);
-    out << " + ";
+    out << " * ";
     myRHS->unparse(out, 0);
     out << ")";
 }
+
+void NegNode::unparse(std::ostream& out, int indent) {
+    out << "(-";
+    myExp->unparse(out, 0);
+    out << ")";
+}
+
+void NotNode::unparse(std::ostream& out, int indent) {
+    out << "(!";
+    myExp->unparse(out, 0);
+    out << ")";
+}
+
 } // End namespace leviathan
