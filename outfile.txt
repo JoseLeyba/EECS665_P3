@@ -1,5 +1,7 @@
-global1: int;
-global2: int;
+global1: int = 3;
+global2: int = true;
+global3: int = "hello";
+global4: int = false;
 main : () void {
 	return;
 }
