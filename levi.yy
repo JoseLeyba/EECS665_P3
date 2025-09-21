@@ -101,9 +101,9 @@
 %token	<leviathan::Token *>       WHILE
 
 %type <leviathan::ProgramNode *> program
-%type <std::list<leviathan::DeclNode *> *> globals
-%type <leviathan::DeclNode *> decl
-%type <leviathan::VarDeclNode *> varDecl
+%type <std::list<leviathan::DeclNode *> *> globals maybeFormals formalList
+%type <leviathan::DeclNode*> formalDecl decl
+%type <leviathan::VarDeclNode*> varDecl
 %type <leviathan::TypeNode *> type
 %type <leviathan::TypeNode *> dataType
 %type <leviathan::TypeNode *> primType
@@ -115,7 +115,10 @@
 %type <leviathan::ExpNode*> simpleExp
 %type <leviathan::ExpNode*> relExp
 %type <leviathan::StmtNode*> stmt
+%type <std::list<leviathan::StmtNode*>*> stmtList
 %type <leviathan::IDNode*> id
+%type <leviathan::FnDeclNode*> fnDecl
+
 
 /* NOTE: Make sure to add precedence and associativity 
  * declarations
@@ -197,20 +200,28 @@ primType	: INT
 
 fnDecl 		: name COLON LPAREN maybeFormals RPAREN type LCURLY stmtList RCURLY
 		  {
+			const Position* p;
+			p = new Position($1->pos(), $9->pos());
+          	$$ = new FnDeclNode(p, $1, $4, $6, $8);
 		  }
 
 maybeFormals	: /* epsilon */
 		  {
+			$$ = new std::list<leviathan::DeclNode*>();
 		  }
 		| formalList
 		  {
+			$$ = $1;
 		  }
 
 formalList	: formalDecl
 		  {
+			$$ = new std::list<leviathan::DeclNode*>();
+        	$$->push_back($1);
 		  }
 		| formalList COMMA formalDecl
 		  {
+			$1->push_back($3); $$ = $1;
 		  }
 
 formalDecl	: name COLON type
@@ -222,9 +233,11 @@ formalDecl	: name COLON type
 
 stmtList	: /* epsilon */
 		  {
+			$$ = new std::list<leviathan::StmtNode*>();
 		  }
 		| stmtList stmt SEMICOL
 		  {
+			$1->push_back($2); $$ = $1;
 		  }
 		| stmtList blockStmt
 		  {
@@ -266,9 +279,13 @@ stmt		: varDecl
 		  }
 		| RETURN exp
 		  {
+			const Position* p = new Position($1->pos(), $2->pos());
+        	$$ = new ReturnStmtNode(p, $2);
 		  }
 		| RETURN
 		  {
+			Position* p = new Position($1->pos(), $1->pos());
+        	$$ = new ReturnStmtNode(p, nullptr);
 		  }
 
 exp		: exp DASH exp

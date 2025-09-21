@@ -163,5 +163,44 @@ void NotNode::unparse(std::ostream& out, int indent) {
     myExp->unparse(out, 0);
     out << ")";
 }
+void ReturnStmtNode::unparse(std::ostream& out, int indent) {
+    doIndent(out, indent);
+    out << "return";
+    if (myExp) {
+        out << " ";
+        myExp->unparse(out, 0);
+    }
+    out << ";\n";
+}
 
+void FnDeclNode::unparse(std::ostream& out, int indent){
+    doIndent(out, indent);
+    myID->unparse(out, 0);
+    out << " : (";
+
+    bool first = true;
+    for (auto d : *myFormals){
+        if (!first) out << ", ";
+        first = false;
+
+        if (auto vd = dynamic_cast<VarDeclNode*>(d)){
+            vd->id()->unparse(out, 0);
+            out << ": ";
+            vd->type()->unparse(out, 0);
+        } else {
+            d->unparse(out, 0);
+        }
+    }
+
+    out << ") ";
+    myRetType->unparse(out, 0);
+    out << " {\n";
+
+    for (auto s : *myBody){
+        s->unparse(out, indent+1);
+    }
+
+    doIndent(out, indent);
+    out << "}\n";
+}
 } // End namespace leviathan
