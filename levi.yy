@@ -122,6 +122,7 @@
 %type <leviathan::FnDeclNode*> fnDecl
 %type <leviathan::ExpNode*> literal
 %type <leviathan::InitializerNode*> initializer
+%type <std::list<leviathan::ExpNode*>*> litList
 
 /* NOTE: Make sure to add precedence and associativity 
  * declarations
@@ -432,18 +433,26 @@ term 		: loc
 
 initializer	: literal
 		  {
-			auto lst = new std::list<ExpNode*>();
+			auto* lst = new std::list<ExpNode*>();
 			lst->push_back($1);
 			const Position* p = new Position($1->pos(), $1->pos());
 			$$ = new InitializerNode(p, lst);
-		  } 
+		  }
 		| LBRACKET litList RBRACKET
-		  { } 
+		  {
+			const Position *p = new Position($2->front()->pos(), $2->back()->pos());
+			$$ = new InitializerNode(p, $2);
+		  } 
 
 litList		: literal
-		  { } 
-		| literal COMMA litList
-		  { } 
+		  { 
+			$$ = new std::list<leviathan::ExpNode*>();
+        	$$->push_back($1);
+		  } 
+		| litList COMMA literal
+		  {
+			$$ = $1; $$->push_back($3);
+		  }
 
 literal		: TRUE
 		  {

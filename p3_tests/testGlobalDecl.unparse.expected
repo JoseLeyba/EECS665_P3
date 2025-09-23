@@ -13,6 +13,7 @@ g5 : bool;
 g6 : file;
 g7 : int = 42;
 g8 : bool = true;
+g9 : bool = [true,42,false,"hello"];
 zero : () int {
     return 0;
 }
