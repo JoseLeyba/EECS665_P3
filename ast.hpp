@@ -55,10 +55,10 @@ private:
  **/
 class InitializerNode : public ASTNode{
 public:
-	InitializerNode(const Position * p, ExpNode* expr) : ASTNode(p), myExp(expr) {}
+	InitializerNode(const Position * p, std::list<ExpNode*>* exprs) : ASTNode(p), myExprs(exprs) {}
 	void unparse(std::ostream& out, int indent) override;
 private:
-	ExpNode * myExp;
+	std::list<ExpNode*>* myExprs;
 };
 
 class StmtNode : public ASTNode{

@@ -432,9 +432,10 @@ term 		: loc
 
 initializer	: literal
 		  {
-			const Position * p;
-			p = new Position($1->pos(), $1->pos());
-			$$ = new InitializerNode(p, $1);
+			auto lst = new std::list<ExpNode*>();
+			lst->push_back($1);
+			const Position* p = new Position($1->pos(), $1->pos());
+			$$ = new InitializerNode(p, lst);
 		  } 
 		| LBRACKET litList RBRACKET
 		  { } 

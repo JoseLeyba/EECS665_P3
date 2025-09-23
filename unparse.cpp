@@ -91,9 +91,19 @@ void StrLitNode::unparse(std::ostream &out, int indent) {
 }
 
 void InitializerNode::unparse(std::ostream &out, int indent) {
-	this->myExp->unparse(out, 0);
+    if (myExprs->size() == 1){
+        (*myExprs->begin())->unparse(out, 0);
+    } else {
+        out << "[";
+        bool first = true;
+        for (auto e : *myExprs) {
+            if (!first) out << ", ";
+            e->unparse(out, 0);
+            first = false;
+        }
+        out << "]";
+    }
 }
-
 
 void AndNode::unparse(std::ostream& out, int indent) {
     out << "(";
