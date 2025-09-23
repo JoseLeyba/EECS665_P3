@@ -37,7 +37,8 @@ callZero: () int {
 }
 
 useGlobals: () int {
-    return g7 + get(g3, 1);
+    sink g7;
+    return get(g3, 1);
 }
 math: (a: int) int {
     return -(a + 3 * 4 - 2) / 2;
@@ -60,5 +61,6 @@ indexChain: (a: int[5]) int {
 }
 
 main: () void {
-    return;
+    return (thrash + 1) * 2;
 }
+

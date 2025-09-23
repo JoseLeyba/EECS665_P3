@@ -56,6 +56,10 @@ void IDNode::unparse(std::ostream& out, int indent){
 	out << this->name;
 }
 
+void ThrashNode::unparse(std::ostream& out, int indent){
+	out << "\\\\(-o-)//";
+}
+
 void ImmutableTypeNode::unparse(std::ostream& out, int indent){
     out << "immutable";
     out << " ";
@@ -221,8 +225,54 @@ void ReturnStmtNode::unparse(std::ostream& out, int indent) {
     out << ";\n";
 }
 
+void AssignStmtNode::unparse(std::ostream& out, int indent) {
+    doIndent(out, indent);
+    myLoc->unparse(out,0);
+    out<<" = ";
+    myExp->unparse(out,0);
+    out<<";\n";
+}
 
+void PostDecStmtNode::unparse(std::ostream& out, int indent) {
+    doIndent(out, indent);
+    myLoc->unparse(out,0);
+    out<<"--;\n";
+}
 
+void PostIncStmtNode::unparse(std::ostream& out, int indent) {
+    doIndent(out, indent);
+    myLoc->unparse(out,0);
+    out<<"++;\n";
+}
+
+void ReadStmtNode::unparse(std::ostream& out, int indent) {
+    doIndent(out, indent);
+    myLoc->unparse(out,0);
+    out<<" >> ";
+    myExp->unparse(out,0);
+    out<<";\n";
+}
+
+void WriteStmtNode::unparse(std::ostream& out, int indent) {
+    doIndent(out, indent);
+    myLoc->unparse(out,0);
+    out<<" << ";
+    myExp->unparse(out,0);
+    out<<";\n";
+}
+
+void SinkStmtNode::unparse(std::ostream& out, int indent) {
+    doIndent(out, indent);
+    out<<"... ";
+    myID->unparse(out,0);
+    out<<";\n";
+}
+
+void CallStmtNode::unparse(std::ostream& out, int indent) {
+    doIndent(out, indent);
+    myCall->unparse(out,0);
+    out<<";\n";
+}
 void FnDeclNode::unparse(std::ostream& out, int indent){
     doIndent(out, indent);
     myID->unparse(out, 0);

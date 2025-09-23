@@ -123,6 +123,8 @@
 %type <leviathan::ExpNode*> literal
 %type <leviathan::InitializerNode*> initializer
 %type <std::list<leviathan::ExpNode*>*> litList
+%type <leviathan::StmtNode*> blockStmt
+
 
 /* NOTE: Make sure to add precedence and associativity 
  * declarations
@@ -156,7 +158,7 @@ globals		: globals decl
 
 decl		: varDecl SEMICOL
 		  {
-		  $$ = $1;
+		  	$$ = $1;
 		  }
 		| fnDecl
 		  {
@@ -241,6 +243,8 @@ formalList	: formalDecl
 
 formalDecl	: name COLON type
 		  {
+			//Here we end up using a VarDeclNode as the way we defined the production for formalList made it
+			//so we can use the same node for VarDeclNode. So we don't need to define an additional node
 			const Position* p = new Position($1->pos(), $3->pos());
       		$$ = new VarDeclNode(p, $1, $3);
 		  }
@@ -256,10 +260,13 @@ stmtList	: /* epsilon */
 		  }
 		| stmtList stmt SEMICOL
 		  {
-			$1->push_back($2); $$ = $1;
+			$1->push_back($2); 
+			$$ = $1;
 		  }
 		| stmtList blockStmt
 		  {
+			$1->push_back($2); 
+			$$ = $1;
 		  }
 
 blockStmt	: WHILE LPAREN exp RPAREN LCURLY stmtList RCURLY
@@ -274,27 +281,45 @@ blockStmt	: WHILE LPAREN exp RPAREN LCURLY stmtList RCURLY
 
 stmt		: varDecl
 		  {
+			$$ = $1;
 		  }
 		| loc ASSIGN exp
 		  {
+			const Position* p = new Position($1->pos(), $3->pos());
+			$$ = new AssignStmtNode(p, $1, $3);
 		  }
 		| callExp
 		  {
+			const Position* p = new Position($1->pos(), $1->pos());
+			$$ = new CallStmtNode(p, $1);
 		  }
 		| loc POSTDEC
 		  {
+			const Position* p = new Position($1->pos(), $2->pos());
+			$$ = new PostDecStmtNode(p, $1);
+			
 		  }
 		| loc POSTINC
 		  {
+			const Position* p = new Position($1->pos(), $2->pos());
+			$$ = new PostIncStmtNode(p, $1);
+
 		  }
 		| loc OUTPUT exp
 		  {
+			const Position* p = new Position($1->pos(), $3->pos());
+			$$ = new WriteStmtNode(p, $1, $3);
+
 		  }
 		| loc INPUT loc
 		  {
+			const Position* p = new Position($1->pos(), $3->pos());
+			$$ = new ReadStmtNode(p, $1, $3);
 		  }
 		| SINK name
 		  {
+			const Position* p = new Position($1->pos(), $2->pos());
+			$$ = new SinkStmtNode(p, $2);
 		  }
 		| RETURN exp
 		  {
@@ -423,8 +448,9 @@ term 		: loc
 		| literal
 		  { $$ = $1;}
 		| THRASH 
-		  { /*TODO $$ = new StrLitNode($1->pos(), $1->str());*/
-		   //Should this not be just a ThrashNode?
+		  {
+			const Position* p = new Position($1->pos(), $1->pos());
+    		$$ = new ThrashNode(p);
 		  }
 		| LPAREN exp RPAREN
 		  {$$ = $2;}

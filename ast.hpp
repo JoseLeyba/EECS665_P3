@@ -21,6 +21,8 @@ class StmtNode;
 class IDNode;
 class ExpNode;
 class LocNode;
+class CallExpNode;
+
 /** 
 * \class ASTNode
 * Base class for all other AST Node types
@@ -73,11 +75,21 @@ public:
 **/
 
 class AssignStmtNode : public StmtNode{
+public:
+	AssignStmtNode(const Position * p, LocNode* loc, ExpNode* exp) : StmtNode(p), myLoc(loc), myExp(exp) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    LocNode* myLoc;
+	ExpNode* myExp;
 
 };
 
 class CallStmtNode : public StmtNode{
-
+public:
+	CallStmtNode(const Position * p, CallExpNode* cen) : StmtNode(p), myCall(cen) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    CallExpNode* myCall;
 };
 
 class IfElseStmtNode : public StmtNode{
@@ -89,14 +101,28 @@ class IfStmtNode : public StmtNode{
 };
 
 class PostDecStmtNode : public StmtNode{
-
+public:
+	PostDecStmtNode(const Position * p, LocNode* loc) : StmtNode(p), myLoc(loc) {assert(loc);}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    LocNode* myLoc;
 };
 
 class PostIncStmtNode : public StmtNode{
-
+public:
+	PostIncStmtNode(const Position * p, LocNode* loc) : StmtNode(p), myLoc(loc) {assert(loc);}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    LocNode* myLoc;
 };
 
 class ReadStmtNode : public StmtNode{
+public:
+	ReadStmtNode(const Position * p, LocNode* loc, ExpNode* exp) : StmtNode(p), myLoc(loc), myExp(exp) { assert(loc && exp);}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    LocNode* myLoc;
+	ExpNode* myExp;
 
 };
 
@@ -112,7 +138,11 @@ private:
 };
 
 class SinkStmtNode : public StmtNode{
-
+public:
+	SinkStmtNode(const Position * p, IDNode* id) : StmtNode(p), myID(id) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    IDNode* myID;
 };
 
 class WhileStmtNode : public StmtNode{
@@ -120,6 +150,13 @@ class WhileStmtNode : public StmtNode{
 };
 
 class WriteStmtNode : public StmtNode{
+public:
+	WriteStmtNode(const Position * p, LocNode* loc, ExpNode* exp) : StmtNode(p), myLoc(loc), myExp(exp) { assert(loc && exp);}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    LocNode* myLoc;
+    ExpNode* myExp;
+
 
 };
 
@@ -219,7 +256,7 @@ private:
 class ThrashNode : public ExpNode{
 public:
   ThrashNode(const Position* p) : ExpNode(p) {}
-  void unparse(std::ostream& out, int) override { out << "thrash"; }
+  void unparse(std::ostream& out, int) override;
 };
 
 class TrueNode : public ExpNode{
