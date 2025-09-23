@@ -43,7 +43,7 @@ void ProgramNode::unparse(std::ostream& out, int indent){
 void VarDeclNode::unparse(std::ostream& out, int indent){
 	doIndent(out, indent);
 	this->myID->unparse(out, 0);
-	out << ": ";
+	out << " : ";
 	this->myType->unparse(out, 0);
     if (myInit != nullptr) {
 		out << " = ";
@@ -58,6 +58,7 @@ void IDNode::unparse(std::ostream& out, int indent){
 
 void ImmutableTypeNode::unparse(std::ostream& out, int indent){
     out << "immutable";
+    out << " ";
     myBase->unparse(out, 0);
 }
 
