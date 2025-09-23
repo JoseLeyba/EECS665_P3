@@ -58,7 +58,9 @@ void IDNode::unparse(std::ostream& out, int indent){
 
 void ImmutableTypeNode::unparse(std::ostream& out, int indent){
     out << "immutable";
+    myBase->unparse(out, 0);
 }
+
 void IntTypeNode::unparse(std::ostream& out, int indent){
 	out << "int";
 }
