@@ -52,6 +52,18 @@ void VarDeclNode::unparse(std::ostream& out, int indent){
 	out << ";\n";
 }
 
+void FormalDeclNode::unparse(std::ostream& out, int indent){
+	doIndent(out, indent);
+	this->myID->unparse(out, 0);
+	out << " : ";
+	this->myType->unparse(out, 0);
+    if (myInit != nullptr) {
+		out << " = ";
+		this->myInit->unparse(out, 0);
+	}
+	out << ";\n";
+}
+
 void IDNode::unparse(std::ostream& out, int indent){
 	out << this->name;
 }
@@ -328,5 +340,38 @@ void CallExpNode::unparse(std::ostream& out, int){
     e->unparse(out, 0);
   }
   out << ")";
+}
+
+void WhileStmtNode::unparse(std::ostream& out, int indent){
+  doIndent(out, indent);
+  out << "while (";
+  myCond->unparse(out, 0);
+  out << ") {\n";
+  for (auto s : *myBody){ s->unparse(out, indent+1); }
+  doIndent(out, indent);
+  out << "}\n";
+}
+
+void IfStmtNode::unparse(std::ostream& out, int indent){
+  doIndent(out, indent);
+  out << "if (";
+  myCond->unparse(out, 0);
+  out << ") {\n";
+  for (auto s : *myBody){ s->unparse(out, indent+1); }
+  doIndent(out, indent);
+  out << "}\n";
+}
+
+void IfElseStmtNode::unparse(std::ostream& out, int indent){
+  doIndent(out, indent);
+  out << "if (";
+  myCond->unparse(out, 0);
+  out << ") {\n";
+  for (auto s : *myBody){ s->unparse(out, indent+1); }
+  doIndent(out, indent);
+  out << "} else {\n";
+  for (auto s : *myElseBody){ s->unparse(out, indent+1); }
+  doIndent(out, indent);
+  out << "}\n";
 }
 } // End namespace leviathan

@@ -93,11 +93,24 @@ private:
 };
 
 class IfElseStmtNode : public StmtNode{
+public:
+	IfElseStmtNode(const Position * p, ExpNode* if_cond, std::list<StmtNode*>* if_body, std::list<StmtNode*>* else_body) 
+    : StmtNode(p), myCond(if_cond), myBody(if_body), myElseBody(else_body) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    ExpNode* myCond;
+	std::list<StmtNode*>* myBody;
+    std::list<StmtNode*>* myElseBody;
 
 };
 
 class IfStmtNode : public StmtNode{
-
+public:
+	IfStmtNode(const Position * p, ExpNode* if_cond, std::list<StmtNode*>* if_body) : StmtNode(p), myCond(if_cond), myBody(if_body) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    ExpNode* myCond;
+	std::list<StmtNode*>* myBody;
 };
 
 class PostDecStmtNode : public StmtNode{
@@ -146,7 +159,12 @@ private:
 };
 
 class WhileStmtNode : public StmtNode{
-
+public:
+	WhileStmtNode(const Position * p, ExpNode* while_cond, std::list<StmtNode*>* if_body) : StmtNode(p), myCond(while_cond), myBody(if_body) {}
+	void unparse(std::ostream& out, int indent) override;
+private:
+    ExpNode* myCond;
+	std::list<StmtNode*>* myBody;
 };
 
 class WriteStmtNode : public StmtNode{
@@ -205,7 +223,25 @@ private:
 };
 
 class FormalDeclNode : public VarDeclNode{  
+public:
+	FormalDeclNode(const Position * p, IDNode * inID, TypeNode * inType) 
+	: VarDeclNode(p, inID, inType), myID(inID), myType(inType) {
+		assert (myType != nullptr);
+		assert (myID != nullptr);
+	}
 
+	FormalDeclNode(const Position * p, IDNode * inID, TypeNode * inType, InitializerNode * initType)
+	: VarDeclNode(p, inID, inType, initType), myID(inID), myType(inType), myInit(initType){
+		assert (myType != nullptr);
+		assert (myID != nullptr);
+	}
+	void unparse(std::ostream& out, int indent);
+    IDNode* id() const { return myID; }
+    TypeNode* type() const { return myType; }
+private:
+	IDNode * myID;
+	TypeNode * myType;
+    InitializerNode * myInit;
 };
 
 

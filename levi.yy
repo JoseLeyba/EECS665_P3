@@ -245,8 +245,9 @@ formalDecl	: name COLON type
 		  {
 			//Here we end up using a VarDeclNode as the way we defined the production for formalList made it
 			//so we can use the same node for VarDeclNode. So we don't need to define an additional node
+			//Nevermind, I made it a FormalDeclNode
 			const Position* p = new Position($1->pos(), $3->pos());
-      		$$ = new VarDeclNode(p, $1, $3);
+      		$$ = new FormalDeclNode(p, $1, $3);
 		  }
 		| name COLON type ASSIGN initializer
 		  {
@@ -271,12 +272,21 @@ stmtList	: /* epsilon */
 
 blockStmt	: WHILE LPAREN exp RPAREN LCURLY stmtList RCURLY
 		  {
+			const Position* p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new WhileStmtNode(p, $3, $6);
 		  }
 		| IF LPAREN exp RPAREN LCURLY stmtList RCURLY
 		  {
+			const Position* p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new IfStmtNode(p, $3, $6);
 		  }
 		| IF LPAREN exp RPAREN LCURLY stmtList RCURLY ELSE LCURLY stmtList RCURLY
 		  {
+			const Position* p;
+			p = new Position($1->pos(), $3->pos());
+			$$ = new IfElseStmtNode(p, $3, $6, $10);
 		  }
 
 stmt		: varDecl
@@ -285,7 +295,8 @@ stmt		: varDecl
 		  }
 		| loc ASSIGN exp
 		  {
-			const Position* p = new Position($1->pos(), $3->pos());
+			const Position* p;
+			p = new Position($1->pos(), $3->pos());
 			$$ = new AssignStmtNode(p, $1, $3);
 		  }
 		| callExp
@@ -511,7 +522,8 @@ loc		: name
 		  }
 		| loc LBRACKET exp RBRACKET
 		  {
-			const Position* p = new Position($1->pos(), $4->pos());
+			const Position* p;
+			p = new Position($1->pos(), $4->pos());
       		$$ = new ArrayIndexNode(p, $1, $3);
 		  }
 
