@@ -245,7 +245,7 @@ formalDecl	: name COLON type
 		  {
 			//Here we end up using a VarDeclNode as the way we defined the production for formalList made it
 			//so we can use the same node for VarDeclNode. So we don't need to define an additional node
-			//Nevermind, I made it a FormalDeclNode
+			//Nevermind, I made it a FormalDeclNode for future projects
 			const Position* p = new Position($1->pos(), $3->pos());
       		$$ = new FormalDeclNode(p, $1, $3);
 		  }
