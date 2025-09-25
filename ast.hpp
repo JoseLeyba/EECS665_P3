@@ -216,6 +216,7 @@ public:
 	void unparse(std::ostream& out, int indent);
     IDNode* id() const { return myID; }
     TypeNode* type() const { return myType; }
+    InitializerNode* init() const { return myInit; }
 private:
 	IDNode * myID;
 	TypeNode * myType;

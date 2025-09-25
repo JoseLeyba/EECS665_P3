@@ -299,6 +299,10 @@ void FnDeclNode::unparse(std::ostream& out, int indent){
             vd->id()->unparse(out, 0);
             out << ": ";
             vd->type()->unparse(out, 0);
+            if (vd->init()) {
+                out << " = ";
+                vd->init()->unparse(out, 0);
+            }
         } else {
             d->unparse(out, 0);
         }
