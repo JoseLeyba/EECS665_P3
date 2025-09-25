@@ -1,0 +1,47 @@
+g1 : int;
+g2 : immutable int;
+g3 : int[3];
+g4 : int = 7;
+g5 : int[3] = [1, 2, 3];
+f1 : file;
+gImmArr : immutable int[2];
+
+arr : int[3] = [10, 20, 30];
+
+id : (x: int) int {
+    return x;
+}
+
+add2 : (p: int, q: int) int {
+    while (8 - (2 + 34)) {
+r: int;
+r = p + q;
+return r;
+if (\\(-o-)//) {
+    x++;
+if (-x) {
+    x--;
+} else {
+        r: int;
+    r = v[0] + v[1] + v[2];
+    return r;
+
+}
+}
+    }
+    r: int;
+    r = p + q;
+    return r;
+}
+
+sum : (a: int, b: int, bias: int = 1) int {
+    c: int;
+    c = (a + b) + bias;
+    return c;
+}
+
+use : (v: int[3]) int {
+    r: int;
+    r = v[0] + v[1] + v[2];
+    return r;
+}
