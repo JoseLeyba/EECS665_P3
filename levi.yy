@@ -238,7 +238,7 @@ formalList	: formalDecl
 		  }
 		| formalList COMMA formalDecl
 		  {
-			$1->push_back($3); $$ = $1;
+			$$ = $1; $$->push_back($3);
 		  }
 
 formalDecl	: name COLON type
@@ -251,8 +251,9 @@ formalDecl	: name COLON type
 		  }
 		| name COLON type ASSIGN initializer
 		  {
-			const Position* p = new Position($1->pos(), $3->pos());
-      		$$ = new VarDeclNode(p, $1, $3, $5);
+			const Position * p;
+		  	p = new Position($1->pos(), $5->pos());
+      		$$ = new FormalDeclNode(p, $1, $3, $5);
 		  }
 
 stmtList	: /* epsilon */

@@ -53,7 +53,6 @@ void VarDeclNode::unparse(std::ostream& out, int indent){
 }
 
 void FormalDeclNode::unparse(std::ostream& out, int indent){
-	doIndent(out, indent);
 	this->myID->unparse(out, 0);
 	out << " : ";
 	this->myType->unparse(out, 0);
@@ -61,7 +60,6 @@ void FormalDeclNode::unparse(std::ostream& out, int indent){
 		out << " = ";
 		this->myInit->unparse(out, 0);
 	}
-	out << ";\n";
 }
 
 void IDNode::unparse(std::ostream& out, int indent){
@@ -294,14 +292,7 @@ void FnDeclNode::unparse(std::ostream& out, int indent){
     for (auto d : *myFormals){
         if (!first) out << ", ";
         first = false;
-
-        if (auto vd = dynamic_cast<VarDeclNode*>(d)){
-            vd->id()->unparse(out, 0);
-            out << ": ";
-            vd->type()->unparse(out, 0);
-        } else {
-            d->unparse(out, 0);
-        }
+        d->unparse(out, 0);
     }
 
     out << ") ";
